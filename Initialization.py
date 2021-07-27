@@ -25,7 +25,6 @@ def fastInitialization(printInfo=True):
         import ESP301Control
 
         from tinkerforge.ip_connection import IPConnection
-        from tinkerforge.brick_stepper import BrickStepper
         from tinkerforge.bricklet_humidity import BrickletHumidity
         from tinkerforge.bricklet_temperature import BrickletTemperature
 
@@ -84,21 +83,12 @@ def fastInitialization(printInfo=True):
     printif('Tinkerforge brick' + '.'*17, end='')
     try:
         ipcon = IPConnection()
-        stepper = BrickStepper(Settings.TF_STEPPER_UID, ipcon)
         humidity = BrickletHumidity(Settings.TF_HUMIDITY_UID, ipcon)
         temperature = BrickletTemperature(Settings.TF_TEMP_UID, ipcon)
 
         ipcon.connect(TF_HOST, TF_PORT)
 
         # Try each one to check
-
-        printif('\n' + 5 * ' ' + 'Stepper motor' + '.'*16, end='')
-        try:
-            stepper.set_motor_current(800)
-            printif('Working')
-        except:
-            printif('Error')
-            failed = True
 
         printif(5 * ' ' + 'Humidity sensor' + '.'*14, end='')
         try:
@@ -148,7 +138,7 @@ def fullInitialization():
             "\nresult in that component not working later on."
             )
 
-    componentsToCheck = ['Rotation stage', 'Beam profiler', 'Tinkerforge linear stage',
+    componentsToCheck = ['Rotation stage', 'Beam profiler',
             'Tinkerforge humidity sensor', 'Tinkerforge temperature sensor']
 
     print(f"There are {len(componentsToCheck)} components that will be checked as a part of this process:")
@@ -396,12 +386,10 @@ def fullInitialization():
                 print("Attempting to connect to tinkerforge bricks...", end='')
 
                 from tinkerforge.ip_connection import IPConnection
-                from tinkerforge.brick_stepper import BrickStepper
                 from tinkerforge.bricklet_humidity import BrickletHumidity
                 from tinkerforge.bricklet_temperature import BrickletTemperature
 
                 ipcon = IPConnection()
-                stepper = BrickStepper(Settings.TF_STEPPER_UID, ipcon)
                 humidity = BrickletHumidity(Settings.TF_HUMIDITY_UID, ipcon)
                 temperature = BrickletTemperature(Settings.TF_TEMP_UID, ipcon)
 
@@ -409,14 +397,6 @@ def fullInitialization():
 
                 # Try each one to check
                 failed = False
-
-                print('\n' + 5 * ' ' + 'Stepper motor' + '.'*16, end='')
-                try:
-                    stepper.set_motor_current(800)
-                    print('Working')
-                except:
-                    print('Error')
-                    failed = True
 
                 print(5 * ' ' + 'Humidity sensor' + '.'*14, end='')
                 try:
@@ -453,10 +433,8 @@ def fullInitialization():
                 print(' '*10 + f'{Settings.TF_HOST}:{Settings.TF_PORT}')
                 print(' '*5 + '4. Ensure that the following UIDs are correct. This can be seen in the BrickViewer program,')
                 print(' '*5 + 'and any changes should be made in the Settings.py file:')
-                print(' '*10 + f'Stepper: {Settings.TF_STEPPER_UID}')
                 print(' '*10 + f'Humidity: {Settings.TF_HUMIDITY_UID}')
                 print(' '*10 + f'Temperature: {Settings.TF_TEMP_UID}')
-                print(' '*5 + '5. Make sure that the power supply (if applicable) is turned on')
 
                 print('\nOnce you have gone through these steps, you may type \'retry\' to attempt connection again, \'skip\' to skip to the next' +
                         '\npart, or \'exit\' to exit the initialization procedure.')
